@@ -10,10 +10,17 @@ import {
   MenuItem,
   Divider,
   Tooltip,
+  InputBase,
+  Badge,
+  useTheme,
+  Stack,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout } from "../store/authSlice";
 import { authService } from "../services/auth.service";
@@ -21,12 +28,15 @@ import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   onDrawerToggle: () => void;
+  isSidebarCollapsed: boolean;
+  drawerWidth: number;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle }) => {
+const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -51,33 +61,58 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle }) => {
       position="fixed"
       elevation={0}
       sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        backdropFilter: "blur(10px)",
-        backgroundColor: "rgba(255,255,255,0.85)",
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        ml: { sm: `${drawerWidth}px` },
+        zIndex: { xs: 1100, sm: 1000 }, // Navbar lower than mobile drawer (1200)
+        backdropFilter: "blur(12px)",
+        backgroundColor: "rgba(255,255,255,0.7)",
         borderBottom: "1px solid",
         borderColor: "divider",
         color: "text.primary",
+        transition: theme.transitions.create(['width', 'margin'], {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        }),
       }}
     >
       <Toolbar sx={{ px: { xs: 2, sm: 3 } }}>
         {/* ===== Mobile Menu Button ===== */}
         <IconButton
           onClick={onDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }}
+          sx={{ mr: 2, display: { sm: "none" }, color: 'primary.main' }}
         >
           <MenuIcon />
         </IconButton>
 
-        {/* ===== Brand ===== */}
-        <Typography
-          variant="h6"
-          fontWeight={700}
-          sx={{ letterSpacing: 0.3 }}
-        >
-          AdminPro
-        </Typography>
+        {/* ===== Search Bar (Optional Enhancement) ===== */}
+        <Box sx={{
+          display: { xs: 'none', md: 'flex' },
+          alignItems: 'center',
+          bgcolor: 'rgba(243, 244, 246, 0.6)',
+          borderRadius: 3,
+          px: 2, py: 0.5,
+          width: 300
+        }}>
+          <SearchIcon sx={{ color: 'text.secondary', mr: 1, fontSize: 20 }} />
+          <InputBase
+            placeholder="Search..."
+            sx={{ flex: 1, fontSize: '0.875rem' }}
+          />
+        </Box>
 
         <Box sx={{ flexGrow: 1 }} />
+
+        {/* ===== Actions ===== */}
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mr: 2 }}>
+          <IconButton size="small" sx={{ color: 'text.secondary' }}>
+            <Badge badgeContent={4} color="error" variant="dot">
+              <NotificationsIcon fontSize="small" />
+            </Badge>
+          </IconButton>
+          <IconButton size="small" sx={{ color: 'text.secondary' }}>
+            <SettingsIcon fontSize="small" />
+          </IconButton>
+        </Stack>
 
         {/* ===== User Section ===== */}
         <Tooltip title="Account settings">
@@ -88,31 +123,36 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle }) => {
               alignItems: "center",
               gap: 1.5,
               cursor: "pointer",
-              px: 1.5,
-              py: 0.75,
-              borderRadius: 3,
+              px: 1,
+              py: 0.5,
+              borderRadius: 30, // Pill shape
+              transition: 'all 0.2s',
+              border: '1px solid transparent',
               "&:hover": {
-                bgcolor: "action.hover",
+                bgcolor: "background.paper",
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                borderColor: 'divider'
               },
             }}
           >
             <Avatar
               sx={{
-                width: 32,
-                height: 32,
+                width: 34,
+                height: 34,
                 bgcolor: "primary.main",
                 fontSize: 14,
                 fontWeight: 600,
+                boxShadow: '0 2px 5px rgba(37, 99, 235, 0.3)'
               }}
             >
               {user?.name?.charAt(0) || "U"}
             </Avatar>
 
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Typography variant="body2" fontWeight={600}>
+            <Box sx={{ display: { xs: "none", sm: "block" }, pr: 1 }}>
+              <Typography variant="body2" fontWeight={600} color="text.primary">
                 {user?.name || "User"}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1 }}>
                 Admin
               </Typography>
             </Box>
@@ -125,24 +165,36 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle }) => {
           open={open}
           onClose={handleMenuClose}
           PaperProps={{
+            elevation: 2,
             sx: {
               mt: 1.5,
               borderRadius: 3,
               minWidth: 180,
+              overflow: 'visible',
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
             },
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem disabled>
-            <AccountCircleIcon fontSize="small" sx={{ mr: 1 }} />
+          <MenuItem onClick={handleMenuClose} sx={{ py: 1.5 }}>
+            <AccountCircleIcon fontSize="small" sx={{ mr: 1.5, color: 'text.secondary' }} />
             Profile
           </MenuItem>
-
-          <Divider />
-
-          <MenuItem onClick={handleLogout}>
-            <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+          <Divider sx={{ my: 0.5 }} />
+          <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: 'error.main' }}>
+            <LogoutIcon fontSize="small" sx={{ mr: 1.5 }} />
             Logout
           </MenuItem>
         </Menu>

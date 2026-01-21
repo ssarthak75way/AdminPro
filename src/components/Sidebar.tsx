@@ -11,22 +11,37 @@ import {
   Typography,
   Stack,
   Avatar,
+  IconButton,
+  Tooltip,
+  useTheme,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PeopleIcon from "@mui/icons-material/People";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate, useLocation } from "react-router-dom";
-
-const drawerWidth = 260;
 
 interface SidebarProps {
   mobileOpen: boolean;
   onDrawerToggle: () => void;
+  isCollapsed: boolean;
+  onCollapseToggle: () => void;
+  drawerWidth: number;
+  collapsedWidth: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onDrawerToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  mobileOpen,
+  onDrawerToggle,
+  isCollapsed,
+  onCollapseToggle,
+  drawerWidth,
+  collapsedWidth
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
@@ -38,127 +53,193 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onDrawerToggle }) => {
     <Box
       sx={{
         height: "100%",
-        bgcolor: "background.paper",
+        display: "flex",
+        flexDirection: "column",
+        overflowX: "hidden",
       }}
     >
       {/* ===== Brand Header ===== */}
-      <Toolbar sx={{ px: 3 }}>
-        <Stack direction="row" spacing={1.5} alignItems="center">
+      <Toolbar
+        sx={{
+          px: isCollapsed ? 1.5 : 3, // slightly less padding when collapsed to center items
+          minHeight: 70,
+          transition: "padding 0.3s ease",
+          justifyContent: isCollapsed ? "center" : "flex-start",
+        }}
+      >
+        <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: '100%', overflow: 'hidden' }}>
           <Avatar
             sx={{
               bgcolor: "primary.main",
               width: 36,
               height: 36,
-              fontWeight: 700,
+              fontWeight: 800,
+              flexShrink: 0,
+              boxShadow: '0 4px 8px rgba(37, 99, 235, 0.2)',
             }}
           >
             A
           </Avatar>
-          <Typography variant="h6" fontWeight={700}>
-            AdminPro
-          </Typography>
+
+          <Box sx={{
+            opacity: isCollapsed ? 0 : 1,
+            transition: "opacity 0.2s",
+            whiteSpace: "nowrap",
+            width: isCollapsed ? 0 : 'auto',
+          }}>
+            <Typography variant="h6" fontWeight={800} sx={{ lineHeight: 1, letterSpacing: '-0.02em', color: 'text.primary' }}>
+              AdminPro
+            </Typography>
+          </Box>
         </Stack>
       </Toolbar>
 
       {/* ===== Navigation ===== */}
-      <List sx={{ px: 2, mt: 1 }}>
+      <List sx={{ px: isCollapsed ? 1 : 2, mt: 1, flexGrow: 1 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
 
           return (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                onClick={() => navigate(item.path)}
-                sx={{
-                  borderRadius: 2.5,
-                  px: 2,
-                  py: 1.2,
-                  position: "relative",
-                  color: isActive ? "primary.main" : "text.primary",
-                  backgroundColor: isActive
-                    ? "rgba(25, 118, 210, 0.08)" // subtle primary tint
-                    : "transparent",
-                  transition: "all 0.25s ease",
-                  "&:hover": {
-                    backgroundColor: isActive
-                      ? "rgba(25, 118, 210, 0.12)"
-                      : "action.hover",
-                  },
-                  "&::before": isActive
-                    ? {
-                      content: '""',
-                      position: "absolute",
-                      left: 0,
-                      top: "20%",
-                      bottom: "20%",
-                      width: 4,
-                      borderRadius: 4,
-                      bgcolor: "primary.main",
-                    }
-                    : {},
-                }}
-              >
-                <ListItemIcon
+            <ListItem key={item.text} disablePadding sx={{ mb: 0.5, display: 'block' }}>
+              <Tooltip title={isCollapsed ? item.text : ""} placement="right" arrow>
+                <ListItemButton
+                  onClick={() => navigate(item.path)}
                   sx={{
-                    minWidth: 36,
-                    color: isActive
-                      ? "primary.main"
-                      : "text.secondary",
+                    justifyContent: isCollapsed ? "center" : "initial",
+                    borderRadius: 2.5,
+                    px: isCollapsed ? 1 : 2,
+                    py: 1.2,
+                    minHeight: 48,
+                    position: "relative",
+                    color: isActive ? "primary.main" : "text.secondary",
+                    backgroundColor: isActive
+                      ? "action.selected"
+                      : "transparent",
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      backgroundColor: isActive
+                        ? "action.selected"
+                        : "action.hover",
+                      transform: isActive ? 'none' : 'translateX(4px)',
+                    },
+                    "&::before": isActive && !isCollapsed
+                      ? {
+                        content: '""',
+                        position: "absolute",
+                        left: 0,
+                        top: "20%",
+                        bottom: "20%",
+                        width: 4,
+                        borderRadius: "0 4px 4px 0",
+                        bgcolor: "primary.main",
+                      }
+                      : {},
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: isCollapsed ? 0 : 2,
+                      justifyContent: "center",
+                      color: isActive ? "primary.main" : "inherit",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
 
-                <ListItemText
-                  primary={item.text}
-                  primaryTypographyProps={{
-                    fontWeight: isActive ? 600 : 500,
-                  }}
-                />
-              </ListItemButton>
+                  <ListItemText
+                    primary={item.text}
+                    sx={{
+                      opacity: isCollapsed ? 0 : 1,
+                      display: isCollapsed ? 'none' : 'block',
+                      transition: "opacity 0.2s"
+                    }}
+                    primaryTypographyProps={{
+                      fontWeight: isActive ? 600 : 500,
+                      fontSize: '0.95rem'
+                    }}
+                  />
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
           );
         })}
       </List>
 
       {/* ===== Pro Plan ===== */}
-      <Box sx={{ px: 2, mt: 'auto', mb: 2 }}>
+      <Box sx={{
+        px: 2,
+        mb: 2,
+        opacity: isCollapsed ? 0 : 1,
+        transition: "opacity 0.2s ease, max-height 0.3s ease",
+        maxHeight: isCollapsed ? 0 : 200,
+        overflow: 'hidden'
+      }}>
         <Box sx={{
-          p: 2,
-          borderRadius: 3,
-          background: 'linear-gradient(135deg, #2563eb, #1e3a8a)',
+          p: 2.5,
+          borderRadius: 4,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
           color: 'white',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)'
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography variant="subtitle2" fontWeight={700} gutterBottom>Pro Account</Typography>
-            <Typography variant="caption" sx={{ display: 'block', mb: 1.5, opacity: 0.8 }}>Get full access to all features.</Typography>
-            <Typography variant="caption" fontWeight={700} sx={{
-              bgcolor: 'rgba(255,255,255,0.2)',
-              px: 1, py: 0.5,
-              borderRadius: 1,
-              cursor: 'pointer',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
-            }}>Upgrade Now</Typography>
+            <Typography variant="caption" sx={{ display: 'block', mb: 2, opacity: 0.9, lineHeight: 1.4 }}>
+              Unlock full access to all features properly.
+            </Typography>
+            <Typography
+              variant="caption"
+              fontWeight={700}
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                px: 1.5, py: 0.75,
+                borderRadius: 2,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
+              }}
+            >
+              Upgrade Now
+            </Typography>
           </Box>
           {/* Decorative circles */}
-          <Box sx={{ position: 'absolute', width: 60, height: 60, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)', top: -10, right: -10 }} />
-          <Box sx={{ position: 'absolute', width: 40, height: 40, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)', bottom: 10, right: -10 }} />
+          <Box sx={{ position: 'absolute', width: 80, height: 80, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)', top: -20, right: -20 }} />
+          <Box sx={{ position: 'absolute', width: 50, height: 50, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.1)', bottom: 10, right: -10 }} />
         </Box>
       </Box>
 
-      {/* ===== Footer ===== */}
-      <Box sx={{ p: 3, pt: 0, textAlign: 'center' }}>
+      {/* ===== Collapse Toggle (Desktop Only) ===== */}
+      <Box sx={{
+        display: { xs: 'none', sm: 'flex' },
+        justifyContent: isCollapsed ? 'center' : 'flex-end',
+        p: 1.5,
+        borderTop: '1px solid',
+        borderColor: 'divider'
+      }}>
+        <IconButton onClick={onCollapseToggle} size="small" sx={{ color: 'text.secondary' }}>
+          {isCollapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
+      </Box>
+
+      {/* ===== Footer for Mobile ===== */}
+      <Box sx={{
+        p: 2,
+        textAlign: 'center',
+        display: { xs: 'block', sm: 'none' }
+      }}>
         <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.7 }}>
-          © 2026 AdminPro v1.2
+          © 2026 AdminPro
         </Typography>
       </Box>
     </Box>
   );
 
   return (
-    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+    <Box component="nav" sx={{ width: { sm: isCollapsed ? collapsedWidth : drawerWidth }, flexShrink: { sm: 0 }, transition: 'width 0.3s ease' }}>
       {/* ===== Mobile Drawer ===== */}
       <Drawer
         variant="temporary"
@@ -171,6 +252,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onDrawerToggle }) => {
             width: drawerWidth,
             borderRight: "none",
             bgcolor: "background.paper",
+            backgroundImage: "none",
           },
         }}
       >
@@ -184,10 +266,12 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onDrawerToggle }) => {
         sx={{
           display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: isCollapsed ? collapsedWidth : drawerWidth,
             bgcolor: "background.paper",
             borderRight: "1px solid",
             borderColor: "divider",
+            transition: "width 0.3s ease",
+            overflowX: 'hidden',
           },
         }}
       >

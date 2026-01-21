@@ -2,7 +2,7 @@
 
 A production-ready, frontend-only web application built with modern web technologies and best practices. This project demonstrates a scalable architecture, secure authentication flow, and a professional UI using Material UI.
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 -   **Framework**: [React 18](https://react.dev/)
 -   **Build Tool**: [Vite](https://vitejs.dev/)
@@ -13,7 +13,7 @@ A production-ready, frontend-only web application built with modern web technolo
 -   **Form Handling**: [React Hook Form](https://react-hook-form.com/)
 -   **Icons**: [MUI Icons](https://doi.org/10.5281/zenodo.1234)
 
-## ✨ Features
+##  Features
 
 ### Authentication
 -   **Secure Login/Register**: Fully functional forms with validation.
@@ -38,7 +38,7 @@ A production-ready, frontend-only web application built with modern web technolo
 -   **Users**: Data table demonstrating list rendering and component reusability.
 -   **Settings**: Configuration page with toggle switches for user preferences.
 
-## 📂 Project Structure
+## Project Structure
 
 ```bash
 src/
@@ -56,12 +56,12 @@ src/
 └── main.tsx        # Entry point with Providers
 ```
 
-## 🛠️ Installation & Setup
+##  Installation & Setup
 
 1.  **Clone the repository**
     ```bash
-    git clone <repository-url>
-    cd react-industry-app
+    git clone https://github.com/ssarthak75way/AdminPro.git
+    cd AdminPro
     ```
 
 2.  **Install dependencies**
@@ -79,7 +79,7 @@ src/
     npm run build
     ```
 
-## 🔐 Demo Credentials
+##  Demo Credentials
 
 You can use the following credentials to log in immediately:
 
@@ -88,7 +88,7 @@ You can use the following credentials to log in immediately:
 
 *Or register a new account to test the full flow.*
 
-## 🧪 Best Practices Implemented
+## Best Practices Implemented
 
 -   **TypeScript**: Full type safety across components, store, and services.
 -   **Clean Code**: Modular folder structure and separation of concerns.
