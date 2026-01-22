@@ -18,6 +18,8 @@ import {
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PeopleIcon from "@mui/icons-material/People";
+import FolderIcon from "@mui/icons-material/Folder";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -45,6 +47,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+    { text: "Files", icon: <FolderIcon />, path: "/files" },
+    { text: "Selectors", icon: <ViewListIcon />, path: "/selectors" },
     { text: "Users", icon: <PeopleIcon />, path: "/users" },
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
   ];

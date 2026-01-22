@@ -21,8 +21,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout } from "../store/authSlice";
+import { useThemeContext } from "../context/ThemeContext";
 import { authService } from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
   const theme = useTheme();
+  const { mode, toggleTheme } = useThemeContext();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -63,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
         ml: { sm: `${drawerWidth}px` },
-        zIndex: { xs: 1100, sm: 1000 }, // Navbar lower than mobile drawer (1200)
+        zIndex: { xs: 1100, sm: 1000 },
         backdropFilter: "blur(12px)",
         backgroundColor: "rgba(255,255,255,0.7)",
         borderBottom: "1px solid",
@@ -104,6 +108,9 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
 
         {/* ===== Actions ===== */}
         <Stack direction="row" spacing={1} alignItems="center" sx={{ mr: 2 }}>
+          <IconButton size="small" onClick={toggleTheme} sx={{ color: 'text.secondary' }}>
+            {mode === 'dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+          </IconButton>
           <IconButton size="small" sx={{ color: 'text.secondary' }}>
             <Badge badgeContent={4} color="error" variant="dot">
               <NotificationsIcon fontSize="small" />
@@ -199,7 +206,7 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
           </MenuItem>
         </Menu>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 };
 

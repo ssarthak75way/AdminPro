@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import UploadWidget from '../components/UploadWidget';
 
 const DRAWER_WIDTH = 280;
 const COLLAPSED_DRAWER_WIDTH = 88;
@@ -56,6 +57,7 @@ const PrivateLayout: React.FC = () => {
       >
         <Outlet />
       </Box>
+      <UploadWidget />
     </Box>
   );
 };

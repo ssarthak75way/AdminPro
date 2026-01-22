@@ -5,20 +5,20 @@ import { store } from "./app/store";
 import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "./theme/muiTheme";
+import { CssBaseline } from "@mui/material";
 import { ToastProvider } from "./context/ToastContext";
+import { CustomThemeProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
+        <CustomThemeProvider>
           <CssBaseline />
           <ToastProvider>
             <App />
           </ToastProvider>
-        </ThemeProvider>
+        </CustomThemeProvider>
       </AuthProvider>
     </Provider>
   </React.StrictMode>

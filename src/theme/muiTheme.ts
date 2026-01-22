@@ -1,223 +1,190 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
-// Premium Color Palette
-const primaryColor = '#3b82f6'; // Bright, trustworthy blue (Tailwind blue-500 equivalent)
-const secondaryColor = '#8b5cf6'; // Modern purple (Tailwind violet-500)
-const backgroundColor = '#f3f4f6'; // Cool gray background
-const paperColor = '#ffffff';
+// Palette definitions
+const lightPalette = {
+  primary: {
+    main: '#3b82f6', // Bright blue
+    light: '#60a5fa',
+    dark: '#2563eb',
+    contrastText: '#ffffff',
+  },
+  secondary: {
+    main: '#8b5cf6', // Violet
+    light: '#a78bfa',
+    dark: '#7c3aed',
+    contrastText: '#ffffff',
+  },
+  background: {
+    default: '#f3f4f6', // gray-100
+    paper: '#ffffff',
+  },
+  text: {
+    primary: '#111827', // gray-900
+    secondary: '#6b7280', // gray-500
+  },
+  divider: 'rgba(229, 231, 235, 1)',
+  action: {
+    hover: 'rgba(59, 130, 246, 0.08)',
+    selected: 'rgba(59, 130, 246, 0.12)',
+  }
+};
 
-let theme = createTheme({
-  palette: {
-    primary: {
-      main: primaryColor,
-      light: '#60a5fa',
-      dark: '#2563eb',
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      main: secondaryColor,
-      light: '#a78bfa',
-      dark: '#7c3aed',
-      contrastText: '#ffffff',
-    },
-    background: {
-      default: backgroundColor,
-      paper: paperColor,
-    },
-    text: {
-      primary: '#111827', // Gray 900
-      secondary: '#6b7280', // Gray 500
-    },
-    action: {
-      hover: 'rgba(59, 130, 246, 0.08)',
-      selected: 'rgba(59, 130, 246, 0.12)',
-    },
-    divider: 'rgba(229, 231, 235, 1)', // Gray 200
+const darkPalette = {
+  primary: {
+    main: '#60a5fa', // lighter blue for dark mode
+    light: '#93c5fd',
+    dark: '#3b82f6',
+    contrastText: '#000000',
   },
-  typography: {
-    fontFamily: '"Plus Jakarta Sans", "Inter", "Roboto", sans-serif',
-    h1: { fontWeight: 800, letterSpacing: '-0.025em', color: '#111827' },
-    h2: { fontWeight: 700, letterSpacing: '-0.025em', color: '#111827' },
-    h3: { fontWeight: 700, letterSpacing: '-0.025em', color: '#1f2937' },
-    h4: { fontWeight: 600, letterSpacing: '-0.015em', color: '#1f2937' },
-    h5: { fontWeight: 600, color: '#374151' },
-    h6: { fontWeight: 600, color: '#374151' },
-    subtitle1: { fontSize: '1rem', fontWeight: 500, color: '#4b5563' },
-    subtitle2: { fontSize: '0.875rem', fontWeight: 500, color: '#6b7280' },
-    body1: { fontSize: '1rem', lineHeight: 1.6, color: '#374151' },
-    body2: { fontSize: '0.875rem', lineHeight: 1.6, color: '#4b5563' },
-    button: { textTransform: 'none', fontWeight: 600, letterSpacing: '0.01em' },
+  secondary: {
+    main: '#a78bfa',
+    light: '#c4b5fd',
+    dark: '#8b5cf6',
+    contrastText: '#000000',
   },
-  shape: {
-    borderRadius: 12,
+  background: {
+    default: '#111827', // gray-900
+    paper: '#1f2937', // gray-800
   },
-  shadows: [
-    'none',
-    '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)', // Soft shadow
-    '0px 2px 4px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.1)',
-    '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    '0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    '0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
-    // ... fill the rest with standard MUI shadows or repeat custom ones if lazy, but for quality let's keep it safe. 
-    // Actually, MUI expects 25 shadows. Let's just override the first few we use and let the rest be default or duplicates to avoid errors if I don't provide all 25.
-    // For safety in this tool, I'll rely on the default array but override using styleOverrides where possible, or just provide a generated array.
-    // To be safe and simple, I will use `createTheme`'s default shadows and just modify components. Refined strategy:
-    ...Array(19).fill('none') // placeholders
-  ] as any, // casting to avoid rigorous type check on length here, but actually better to use `shadows: createTheme({}).shadows` pattern if we want to modify. 
-  // BETTER APPROACH: Let's not manually overwrite the whole shadows array easily without all 25 strings.
-  // Instead, I'll use component overrides for elevation effects.
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        html: { scrollBehavior: 'smooth', height: '100%' },
-        body: {
-          height: '100%',
-          backgroundColor: backgroundColor,
-          fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
-          scrollbarWidth: 'thin',
-          '&::-webkit-scrollbar': { width: '6px', height: '6px' },
-          '&::-webkit-scrollbar-track': { background: 'transparent' },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'rgba(0,0,0,0.1)',
-            borderRadius: '10px',
-            '&:hover': { backgroundColor: 'rgba(0,0,0,0.2)' },
+  text: {
+    primary: '#f9fafb', // gray-50
+    secondary: '#9ca3af', // gray-400
+  },
+  divider: 'rgba(75, 85, 99, 1)', // gray-600
+  action: {
+    hover: 'rgba(96, 165, 250, 0.08)',
+    selected: 'rgba(96, 165, 250, 0.12)',
+  }
+};
+
+export const getTheme = (mode: 'light' | 'dark') => {
+  const isDark = mode === 'dark';
+  const palette = isDark ? darkPalette : lightPalette;
+
+  let theme = createTheme({
+    palette: {
+      mode,
+      ...palette,
+    },
+    typography: {
+      fontFamily: '"Plus Jakarta Sans", "Inter", "Roboto", sans-serif',
+      h1: { fontWeight: 800, letterSpacing: '-0.025em', color: palette.text.primary },
+      h2: { fontWeight: 700, letterSpacing: '-0.025em', color: palette.text.primary },
+      h3: { fontWeight: 700, letterSpacing: '-0.025em', color: palette.text.primary },
+      h4: { fontWeight: 600, letterSpacing: '-0.015em', color: palette.text.primary },
+      h5: { fontWeight: 600, color: palette.text.primary },
+      h6: { fontWeight: 600, color: palette.text.primary },
+      subtitle1: { fontSize: '1rem', fontWeight: 500, color: palette.text.secondary },
+      subtitle2: { fontSize: '0.875rem', fontWeight: 500, color: palette.text.secondary },
+      body1: { fontSize: '1rem', lineHeight: 1.6, color: palette.text.primary },
+      body2: { fontSize: '0.875rem', lineHeight: 1.6, color: palette.text.secondary },
+      button: { textTransform: 'none', fontWeight: 600, letterSpacing: '0.01em' },
+    },
+    shape: {
+      borderRadius: 12,
+    },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          html: { scrollBehavior: 'smooth', height: '100%' },
+          body: {
+            height: '100%',
+            backgroundColor: palette.background.default,
+            fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+            scrollbarWidth: 'thin',
+            '&::-webkit-scrollbar': { width: '6px', height: '6px' },
+            '&::-webkit-scrollbar-track': { background: 'transparent' },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+              borderRadius: '10px',
+              '&:hover': { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' },
+            },
           },
+          '#root': { height: '100%' },
         },
-        '#root': { height: '100%' },
       },
-    },
-    MuiButton: {
-      defaultProps: { disableElevation: true },
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          padding: '8px 16px',
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          '&:hover': { transform: 'translateY(-1px)' },
-        },
-        containedPrimary: {
-          background: `linear-gradient(135deg, ${primaryColor}, #2563eb)`,
-          boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.5)',
-          '&:hover': {
-            boxShadow: '0 6px 10px -1px rgba(59, 130, 246, 0.6)',
+      MuiButton: {
+        defaultProps: { disableElevation: true },
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            padding: '8px 16px',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': { transform: 'translateY(-1px)' },
           },
-        },
-        sizeLarge: { padding: '10px 24px', fontSize: '1rem' },
-      },
-    },
-    MuiPaper: {
-      defaultProps: { elevation: 0 },
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-        },
-        elevation1: {
-          boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-          border: '1px solid rgba(229, 231, 235, 0.5)',
-        },
-        elevation2: {
-          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-          border: '1px solid rgba(229, 231, 235, 0.5)',
-        },
-        elevation3: {
-          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)',
-        },
-        rounded: { borderRadius: 16 },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
-          border: '1px solid rgba(229, 231, 235, 0.6)',
-          boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)',
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(229, 231, 235, 1)', // Gray 200
-            transition: 'border-color 0.2s ease-in-out',
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#9ca3af', // Gray 400
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: primaryColor,
-            borderWidth: 2,
-            boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.1)',
-          },
-        },
-      },
-    },
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(243, 244, 246, 1)',
-          color: '#1f2937',
-        },
-      },
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#ffffff',
-          borderRight: '1px solid rgba(243, 244, 246, 1)',
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          margin: '2px 8px',
-          padding: '10px 16px',
-          '&.Mui-selected': {
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            color: primaryColor,
+          containedPrimary: {
+            // Let MUI handle standard contained primary with palette, just adding shadow
+            boxShadow: isDark ? '0 4px 6px -1px rgba(96, 165, 250, 0.3)' : '0 4px 6px -1px rgba(59, 130, 246, 0.5)',
             '&:hover': {
-              backgroundColor: 'rgba(59, 130, 246, 0.15)',
-            },
-            '& .MuiListItemIcon-root': {
-              color: primaryColor,
-            },
-          },
-          '&:hover': {
-            backgroundColor: 'rgba(243, 244, 246, 1)',
+              boxShadow: isDark ? '0 6px 10px -1px rgba(96, 165, 250, 0.4)' : '0 6px 10px -1px rgba(59, 130, 246, 0.6)',
+            }
           },
         },
       },
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          minWidth: 40,
-          color: '#9ca3af',
+      MuiPaper: {
+        defaultProps: { elevation: 0 },
+        styleOverrides: {
+          root: {
+            backgroundImage: 'none',
+          },
+          elevation1: {
+            border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(229, 231, 235, 0.5)',
+            boxShadow: isDark ? 'none' : '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+          },
         },
       },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: isDark ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(12px)',
+            borderBottom: `1px solid ${palette.divider}`,
+            color: palette.text.primary,
+          },
+        },
+      },
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: palette.background.paper,
+            borderRight: `1px solid ${palette.divider}`,
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            borderRadius: 10,
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: palette.divider,
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: palette.text.secondary,
+            },
+          },
+        },
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            '&.Mui-selected': {
+              backgroundColor: palette.action.selected,
+              color: palette.primary.main,
+              '& .MuiListItemIcon-root': {
+                color: palette.primary.main,
+              }
+            }
+          }
+        }
+      }
     },
-  },
-});
+  });
 
-// Since we did a trick with shadows array, let's just restore default shadows but keep our specific changes?
-// Actually simpler to just not define shadows array above and rely on component elevation overrides if I can.
-// But I wrote it, let's fix the invalid array issue.
-// I will just clone the default shadows first.
+  return responsiveFontSizes(theme);
+};
 
-const defaultTheme = createTheme();
-theme.shadows = [...defaultTheme.shadows] as any;
-// Apply custom overrides for specific levels if needed
-theme.shadows[1] = '0px 1px 3px rgba(0, 0, 0, 0.05), 0px 1px 2px rgba(0, 0, 0, 0.1)';
-theme.shadows[2] = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)';
-theme.shadows[4] = '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)';
-
-theme = responsiveFontSizes(theme);
-
-export default theme;
+// Default export for backward compatibility if needed, though we should switch to named export.
+// For now, let's export default a light theme to avoid breaking imports immediately, but we will update main.tsx
+export default getTheme('light');
 
