@@ -59,24 +59,78 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
     dispatch(logout());
     navigate("/login");
   };
+  const appBarSx = {
+    width: { sm: `calc(100% - ${drawerWidth}px)` },
+    ml: { sm: `${drawerWidth}px` },
+    zIndex: { xs: 1100, sm: 1000 },
+    backdropFilter: "blur(12px)",
+    backgroundColor: "rgba(255,255,255,0.7)",
+    borderBottom: "1px solid",
+    borderColor: "divider",
+    color: "text.primary",
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  }
 
+  const searchBarSx = {
+    display: { xs: 'none', md: 'flex' },
+    alignItems: 'center',
+    bgcolor: 'rgba(243, 244, 246, 0.6)',
+    borderRadius: 3,
+    px: 2, py: 0.5,
+    width: 300
+  }
+
+  const userSectiuonSx = {
+    display: "flex",
+    alignItems: "center",
+    gap: 1.5,
+    cursor: "pointer",
+    px: 1,
+    py: 0.5,
+    borderRadius: 30, // Pill shape
+    transition: 'all 0.2s',
+    border: '1px solid transparent',
+    "&:hover": {
+      bgcolor: "background.paper",
+      boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+      borderColor: 'divider'
+    },
+  }
+  const userMenuSx = {
+    mt: 1.5,
+    borderRadius: 3,
+    minWidth: 180,
+    overflow: 'visible',
+    '&:before': {
+      content: '""',
+      display: 'block',
+      position: 'absolute',
+      top: 0,
+      right: 14,
+      width: 10,
+      height: 10,
+      bgcolor: 'background.paper',
+      transform: 'translateY(-50%) rotate(45deg)',
+      zIndex: 0,
+    },
+  }
+  const avatarSx = {
+    width: 34,
+    height: 34,
+    bgcolor: "primary.main",
+    fontSize: 14,
+    fontWeight: 600,
+    boxShadow: '0 2px 5px rgba(37, 99, 235, 0.3)'
+  }
   return (
     <AppBar
       position="fixed"
       elevation={0}
       sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        ml: { sm: `${drawerWidth}px` },
-        zIndex: { xs: 1100, sm: 1000 },
-        backdropFilter: "blur(12px)",
-        backgroundColor: "rgba(255,255,255,0.7)",
-        borderBottom: "1px solid",
-        borderColor: "divider",
-        color: "text.primary",
-        transition: theme.transitions.create(['width', 'margin'], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
+        ...appBarSx,
       }}
     >
       <Toolbar sx={{ px: { xs: 2, sm: 3 } }}>
@@ -90,12 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
 
         {/* ===== Search Bar (Optional Enhancement) ===== */}
         <Box sx={{
-          display: { xs: 'none', md: 'flex' },
-          alignItems: 'center',
-          bgcolor: 'rgba(243, 244, 246, 0.6)',
-          borderRadius: 3,
-          px: 2, py: 0.5,
-          width: 300
+          ...searchBarSx,
         }}>
           <SearchIcon sx={{ color: 'text.secondary', mr: 1, fontSize: 20 }} />
           <InputBase
@@ -126,30 +175,12 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
           <Box
             onClick={handleMenuOpen}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5,
-              cursor: "pointer",
-              px: 1,
-              py: 0.5,
-              borderRadius: 30, // Pill shape
-              transition: 'all 0.2s',
-              border: '1px solid transparent',
-              "&:hover": {
-                bgcolor: "background.paper",
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                borderColor: 'divider'
-              },
+              ...userSectiuonSx,
             }}
           >
             <Avatar
               sx={{
-                width: 34,
-                height: 34,
-                bgcolor: "primary.main",
-                fontSize: 14,
-                fontWeight: 600,
-                boxShadow: '0 2px 5px rgba(37, 99, 235, 0.3)'
+                ...avatarSx,
               }}
             >
               {user?.name?.charAt(0) || "U"}
@@ -174,22 +205,7 @@ const Navbar: React.FC<NavbarProps> = ({ onDrawerToggle, drawerWidth }) => {
           PaperProps={{
             elevation: 2,
             sx: {
-              mt: 1.5,
-              borderRadius: 3,
-              minWidth: 180,
-              overflow: 'visible',
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0,
-              },
+              ...userMenuSx,
             },
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}

@@ -1,5 +1,7 @@
 import React from "react";
 import DataTable, { type TableRowData } from "../components/DataTable";
+import ConfirmBox from "../components/ConfirmBox";
+
 
 const usersData: TableRowData[] = [
   {
@@ -39,22 +41,64 @@ const usersData: TableRowData[] = [
   },
 ];
 
+
+
+
 const Users: React.FC = () => {
+
+  const [confirmState, setConfirmState] = React.useState<{
+    message: string;
+    onConfirm: () => void;
+    onCancel: () => void;
+  } | null>(null);
+
+
   const handleEdit = (user: TableRowData) => {
-    console.log("Edit user:", user);
+    setConfirmState({
+      message: `Edit user ${user.name} functionality is not implemented yet.`,
+      onConfirm: () => {
+        setConfirmState(null);
+        console.log("Edit confirmed:", user);
+      },
+      onCancel: () => {
+        setConfirmState(null);
+      }
+    });
   };
 
   const handleDelete = (user: TableRowData) => {
-    console.log("Delete user:", user);
+    setConfirmState({
+      message: `Are you sure you want to delete user ${user.name}?`,
+      onConfirm: () => {
+        console.log("Delete confirmed:", user);
+        setConfirmState(null);
+      },
+      onCancel: () => {
+        setConfirmState(null);
+      }
+    });
   };
 
+
+
+
   return (
-    <DataTable
-      title="Users Management"
-      rows={usersData}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-    />
+    <>
+      <DataTable
+        title="Users Management"
+        rows={usersData}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+
+      {confirmState && (
+        <ConfirmBox
+          message={confirmState.message}
+          onConfirm={confirmState.onConfirm}
+          onCancel={confirmState.onCancel}
+        />
+      )}
+    </>
   );
 };
 

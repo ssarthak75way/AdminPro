@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import React from 'react';
 import { Box, Typography, Paper, useTheme } from '@mui/material';
 import Select from 'react-select';
@@ -61,20 +59,20 @@ const SelectorsPage: React.FC = () => {
 
 
   const baseSelectStyles = {
-    control: (base: any) => ({
-      ...base,
+    control: (base: unknown) => ({
+      ...base as object,
       backgroundColor: isDark ? '#1f2937' : '#fff',
       borderColor: isDark ? '#374151' : '#d1d5db',
       color: isDark ? '#fff' : '#000',
       minHeight: 44,
     }),
-    menu: (base: any) => ({
-      ...base,
+    menu: (base: unknown) => ({
+      ...base as object,
       backgroundColor: isDark ? '#1f2937' : '#fff',
       zIndex: 1300,
     }),
-    option: (base: any, state: any) => ({
-      ...base,
+    option: (base: unknown, state: { isFocused: boolean }) => ({
+      ...base as object,
       backgroundColor: state.isFocused
         ? isDark
           ? '#374151'
@@ -83,20 +81,20 @@ const SelectorsPage: React.FC = () => {
       color: isDark ? '#fff' : '#000',
       cursor: 'pointer',
     }),
-    singleValue: (base: any) => ({
-      ...base,
+    singleValue: (base: unknown) => ({
+      ...base as object,
       color: isDark ? '#fff' : '#000',
     }),
-    multiValue: (base: any) => ({
-      ...base,
+    multiValue: (base: unknown) => ({
+      ...base as object,
       backgroundColor: isDark ? '#374151' : '#e5e7eb',
     }),
-    multiValueLabel: (base: any) => ({
-      ...base,
+    multiValueLabel: (base: unknown) => ({
+      ...base as object,
       color: isDark ? '#fff' : '#000',
     }),
-    input: (base: any) => ({
-      ...base,
+    input: (base: unknown) => ({
+      ...base as object,
       color: isDark ? '#fff' : '#000',
     }),
   };

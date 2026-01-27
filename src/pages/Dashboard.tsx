@@ -51,7 +51,42 @@ const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
+const statCardSx = {
+  p: 3,
+  height: 160,
+  borderRadius: 4,
+  color: "common.white",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    transform: "translateY(-6px)",
+    boxShadow: "0px 12px 30px rgba(0,0,0,0.25)",
+  },
+};
+const avatarSx = {
+  bgcolor: "rgba(255,255,255,0.2)",
+  backdropFilter: "blur(4px)",
+  width: 40,
+  height: 40,
+  color: "inherit"
+}
 
+const recentSx = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "text.secondary",
+  gap: 2,
+  py: 4,
+  bgcolor: 'background.default',
+  borderRadius: 3,
+  border: '1px dashed',
+  borderColor: 'divider',
+}
 const Dashboard: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
 
@@ -73,33 +108,19 @@ const Dashboard: React.FC = () => {
           <Grid key={stat.title} size={{ xs: 12, sm: 6, md: 3 }}>
             <Paper
               sx={{
-                p: 3,
-                height: 160,
-                borderRadius: 4,
-                color: "common.white",
+                ...statCardSx,
                 background: stat.gradient,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                transition: "all 0.3s ease",
                 animation: `${fadeIn} 0.6s ease-out ${index * 0.1}s backwards`,
-                "&:hover": {
-                  transform: "translateY(-6px)",
-                  boxShadow: "0px 12px 30px rgba(0,0,0,0.25)",
-                },
               }}
             >
+
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="subtitle2" sx={{ opacity: 0.9, fontWeight: 600 }}>
                   {stat.title}
                 </Typography>
                 <Avatar
                   sx={{
-                    bgcolor: "rgba(255,255,255,0.2)",
-                    backdropFilter: "blur(4px)",
-                    width: 40,
-                    height: 40,
-                    color: "inherit",
+                    ...avatarSx
                   }}
                 >
                   {stat.icon}
@@ -138,18 +159,7 @@ const Dashboard: React.FC = () => {
 
             <Box
               sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "text.secondary",
-                gap: 2,
-                py: 4,
-                bgcolor: 'background.default',
-                borderRadius: 3,
-                border: '1px dashed',
-                borderColor: 'divider',
+                ...recentSx,
               }}
             >
               <ActivityIcon sx={{ fontSize: 48, opacity: 0.2 }} />

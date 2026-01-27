@@ -37,6 +37,47 @@ interface DataTableProps {
   onDelete?: (row: TableRowData) => void;
 }
 
+
+
+const tableSx = {
+  borderRadius: 4,
+  p: 3,
+  border: "1px solid",
+  borderColor: "divider",
+  background:
+    "linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85))",
+  backdropFilter: "blur(8px)",
+}
+
+const tableCellSx ={
+  fontSize: 12,
+  fontWeight: 700,
+  textTransform: "uppercase",
+  color: "text.secondary",
+  pb: 1.5,
+}
+const tableRowSx ={
+  transition: "all 0.25s ease",
+  "&:hover": {
+    backgroundColor: "action.hover",
+    transform: "scale(1.002)",
+  },
+}
+const tableAvatarSx ={
+  bgcolor: "primary.main",
+  width: 42,
+  height: 42,
+  fontWeight: 700,
+  fontSize: "1rem",
+  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+}
+const tableChipSx = {
+  fontWeight: 600,
+  bgcolor: 'rgba(37, 99, 235, 0.1)',
+  color: 'primary.main',
+  borderRadius: '6px',
+}
+const actions = ["User", "Email", "Role", "Status", "Actions"];
 const DataTable: React.FC<DataTableProps> = ({
   title,
   subtitle,
@@ -48,13 +89,7 @@ const DataTable: React.FC<DataTableProps> = ({
     <Paper
       elevation={0}
       sx={{
-        borderRadius: 4,
-        p: 3,
-        border: "1px solid",
-        borderColor: "divider",
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85))",
-        backdropFilter: "blur(8px)",
+       ...tableSx,
       }}
     >
       {/* ===== Header / Toolbar ===== */}
@@ -101,16 +136,12 @@ const DataTable: React.FC<DataTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              {["User", "Email", "Role", "Status", "Actions"].map((head) => (
+              {actions.map((head) => (
                 <TableCell
                   key={head}
                   align={head === "Actions" ? "right" : "left"}
                   sx={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    color: "text.secondary",
-                    pb: 1.5,
+                   ...tableCellSx,
                   }}
                 >
                   {head}
@@ -124,11 +155,7 @@ const DataTable: React.FC<DataTableProps> = ({
               <TableRow
                 key={row.id}
                 sx={{
-                  transition: "all 0.25s ease",
-                  "&:hover": {
-                    backgroundColor: "action.hover",
-                    transform: "scale(1.002)",
-                  },
+               ...tableRowSx,
                 }}
               >
                 {/* User */}
@@ -136,12 +163,7 @@ const DataTable: React.FC<DataTableProps> = ({
                   <Stack direction="row" spacing={2} alignItems="center">
                     <Avatar
                       sx={{
-                        bgcolor: "primary.main",
-                        width: 42,
-                        height: 42,
-                        fontWeight: 700,
-                        fontSize: "1rem",
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                       ...tableAvatarSx,
                       }}
                     >
                       {row.name.charAt(0)}
@@ -171,10 +193,7 @@ const DataTable: React.FC<DataTableProps> = ({
                     label={row.role}
                     size="small"
                     sx={{
-                      fontWeight: 600,
-                      bgcolor: 'rgba(37, 99, 235, 0.1)',
-                      color: 'primary.main',
-                      borderRadius: '6px',
+                    ...tableChipSx,
                     }}
                   />
                 </TableCell>

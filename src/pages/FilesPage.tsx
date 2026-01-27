@@ -14,7 +14,6 @@ const FilesPage: React.FC = () => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const uploads = useSelector((state: RootState) => state.upload.uploads);
 
     const onDrop = (acceptedFiles: File[]) => {

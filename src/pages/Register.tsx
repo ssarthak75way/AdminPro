@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   TextField,
   Button,
@@ -36,9 +36,8 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const {
-    control,
-    handleSubmit,
-    watch,
+    register,
+    handleSubmit,watch,
     formState: { errors },
   } = useForm<RegisterFormInputs>({
     mode: 'onTouched',
@@ -64,9 +63,8 @@ const Register: React.FC = () => {
       dispatch(loginSuccess(response));
       showToast('Registration successful! Welcome.', 'success');
       navigate('/dashboard');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const message = err?.message || 'Registration failed';
+    } catch (err: unknown) {
+      const message = (err as Error)?.message || 'Registration failed';
       dispatch(loginFailure(message));
       showToast(message, 'error');
     }
@@ -102,16 +100,8 @@ const Register: React.FC = () => {
       </Typography>
 
       {/* Full Name */}
-      <Controller
-        name="name"
-        control={control}
-        rules={{
-          required: 'Full name is required',
-          minLength: { value: 3, message: 'Minimum 3 characters' },
-        }}
-        render={({ field }) => (
-          <TextField
-            {...field}
+      <TextField
+          
             fullWidth
             label="Full Name"
             margin="normal"
@@ -120,24 +110,14 @@ const Register: React.FC = () => {
             helperText={errors.name?.message}
             disabled={isLoading}
             autoComplete="name"
+              {...register('name', {
+              required: 'Full name is required',
+              minLength: { value: 3, message: 'Minimum 3 characters' },
+            })}
           />
-        )}
-      />
-
       {/* Email */}
-      <Controller
-        name="email"
-        control={control}
-        rules={{
-          required: 'Email is required',
-          pattern: {
-            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: 'Invalid email address',
-          },
-        }}
-        render={({ field }) => (
           <TextField
-            {...field}
+          
             fullWidth
             label="Email Address"
             margin="normal"
@@ -145,21 +125,22 @@ const Register: React.FC = () => {
             helperText={errors.email?.message}
             disabled={isLoading}
             autoComplete="email"
+            type="email"
+            
+              {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Invalid email address',
+              },
+            })}
           />
-        )}
-      />
+      
 
       {/* Password */}
-      <Controller
-        name="password"
-        control={control}
-        rules={{
-          required: 'Password is required',
-          minLength: { value: 6, message: 'Minimum 6 characters' },
-        }}
-        render={({ field }) => (
+   
           <TextField
-            {...field}
+          
             fullWidth
             label="Password"
             margin="normal"
@@ -180,22 +161,15 @@ const Register: React.FC = () => {
                 </InputAdornment>
               ),
             }}
+            {...register('password', {
+              required: 'Password is required',
+              minLength: { value: 6, message: 'Minimum 6 characters' },
+            })}
           />
-        )}
-      />
 
       {/* Confirm Password */}
-      <Controller
-        name="confirmPassword"
-        control={control}
-        rules={{
-          required: 'Please confirm your password',
-          validate: (value) =>
-            value === password || 'Passwords do not match',
-        }}
-        render={({ field }) => (
+     
           <TextField
-            {...field}
             fullWidth
             label="Confirm Password"
             margin="normal"
@@ -204,10 +178,13 @@ const Register: React.FC = () => {
             helperText={errors.confirmPassword?.message}
             disabled={isLoading}
             autoComplete="new-password"
+            {...register('confirmPassword', {
+               required: 'Please confirm your password',
+          validate: (value) =>
+            value === password || 'Passwords do not match',
+          })}
           />
-        )}
-      />
-
+  
       {/* Submit */}
       <Button
         type="submit"

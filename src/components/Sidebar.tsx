@@ -53,6 +53,41 @@ const Sidebar: React.FC<SidebarProps> = ({
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
   ];
 
+  const avatarSx = {
+    bgcolor: "primary.main",
+    width: 36,
+    height: 36,
+    fontWeight: 800,
+    flexShrink: 0,
+    boxShadow: '0 4px 8px rgba(37, 99, 235, 0.2)',
+  }
+  
+  const proPlanSx = {
+    px: 2,
+    mb: 2,
+    opacity: isCollapsed ? 0 : 1,
+    transition: "opacity 0.2s ease, max-height 0.3s ease",
+    maxHeight: isCollapsed ? 0 : 200,
+    overflow: 'hidden'
+  }
+  const proThemeSx = {
+    p: 2.5,
+    borderRadius: 4,
+    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+    color: 'white',
+    position: 'relative',
+    overflow: 'hidden',
+    boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)'
+  }
+  const proCaptionSx = {
+    bgcolor: 'rgba(255,255,255,0.2)',
+    border: '1px solid rgba(255,255,255,0.3)',
+    px: 1.5, py: 0.75,
+    borderRadius: 2,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
+  }
   const drawerContent = (
     <Box
       sx={{
@@ -74,12 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: '100%', overflow: 'hidden' }}>
           <Avatar
             sx={{
-              bgcolor: "primary.main",
-              width: 36,
-              height: 36,
-              fontWeight: 800,
-              flexShrink: 0,
-              boxShadow: '0 4px 8px rgba(37, 99, 235, 0.2)',
+            ...avatarSx,
             }}
           >
             A
@@ -102,51 +132,64 @@ const Sidebar: React.FC<SidebarProps> = ({
       <List sx={{ px: isCollapsed ? 1 : 2, mt: 1, flexGrow: 1 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
+          const listItemBtnSx = {
+            justifyContent: isCollapsed ? "center" : "initial",
+            borderRadius: 2.5,
+            px: isCollapsed ? 1 : 2,
+            py: 1.2,
+            minHeight: 48,
+            position: "relative",
+            color: isActive ? "primary.main" : "text.secondary",
+            backgroundColor: isActive
+              ? "action.selected"
+              : "transparent",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: isActive
+                ? "action.selected"
+                : "action.hover",
+              transform: isActive ? 'none' : 'translateX(4px)',
+            },
+            "&::before": isActive && !isCollapsed
+              ? {
+                content: '""',
+                position: "absolute",
+                left: 0,
+                top: "20%",
+                bottom: "20%",
+                width: 4,
+                borderRadius: "0 4px 4px 0",
+                bgcolor: "primary.main",
+              }
+              : {},
+          }
 
+          const listItemIconSx = {
+            minWidth: 0,
+            mr: isCollapsed ? 0 : 2,
+            justifyContent: "center",
+            color: isActive ? "primary.main" : "inherit",
+            transition: "all 0.2s",
+          }
+          const listItemTextSx = {
+            opacity: isCollapsed ? 0 : 1,
+            display: isCollapsed ? 'none' : 'block',
+            transition: "opacity 0.2s"
+          }
+
+          
           return (
             <ListItem key={item.text} disablePadding sx={{ mb: 0.5, display: 'block' }}>
               <Tooltip title={isCollapsed ? item.text : ""} placement="right" arrow>
                 <ListItemButton
                   onClick={() => navigate(item.path)}
                   sx={{
-                    justifyContent: isCollapsed ? "center" : "initial",
-                    borderRadius: 2.5,
-                    px: isCollapsed ? 1 : 2,
-                    py: 1.2,
-                    minHeight: 48,
-                    position: "relative",
-                    color: isActive ? "primary.main" : "text.secondary",
-                    backgroundColor: isActive
-                      ? "action.selected"
-                      : "transparent",
-                    transition: "all 0.2s ease",
-                    "&:hover": {
-                      backgroundColor: isActive
-                        ? "action.selected"
-                        : "action.hover",
-                      transform: isActive ? 'none' : 'translateX(4px)',
-                    },
-                    "&::before": isActive && !isCollapsed
-                      ? {
-                        content: '""',
-                        position: "absolute",
-                        left: 0,
-                        top: "20%",
-                        bottom: "20%",
-                        width: 4,
-                        borderRadius: "0 4px 4px 0",
-                        bgcolor: "primary.main",
-                      }
-                      : {},
+                   ...listItemBtnSx,
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      minWidth: 0,
-                      mr: isCollapsed ? 0 : 2,
-                      justifyContent: "center",
-                      color: isActive ? "primary.main" : "inherit",
-                      transition: "all 0.2s",
+                      ...listItemIconSx,
                     }}
                   >
                     {item.icon}
@@ -155,9 +198,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <ListItemText
                     primary={item.text}
                     sx={{
-                      opacity: isCollapsed ? 0 : 1,
-                      display: isCollapsed ? 'none' : 'block',
-                      transition: "opacity 0.2s"
+                      ...listItemTextSx,
                     }}
                     primaryTypographyProps={{
                       fontWeight: isActive ? 600 : 500,
@@ -173,21 +214,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* ===== Pro Plan ===== */}
       <Box sx={{
-        px: 2,
-        mb: 2,
-        opacity: isCollapsed ? 0 : 1,
-        transition: "opacity 0.2s ease, max-height 0.3s ease",
-        maxHeight: isCollapsed ? 0 : 200,
-        overflow: 'hidden'
+        ...proPlanSx,
       }}>
         <Box sx={{
-          p: 2.5,
-          borderRadius: 4,
-          background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-          color: 'white',
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)'
+         ...proThemeSx,
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography variant="subtitle2" fontWeight={700} gutterBottom>Pro Account</Typography>
@@ -198,13 +228,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               variant="caption"
               fontWeight={700}
               sx={{
-                bgcolor: 'rgba(255,255,255,0.2)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                px: 1.5, py: 0.75,
-                borderRadius: 2,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
+               ...proCaptionSx,
               }}
             >
               Upgrade Now
@@ -241,7 +265,26 @@ const Sidebar: React.FC<SidebarProps> = ({
       </Box>
     </Box>
   );
-
+  const drawerDeskSx = {
+    display: { xs: "none", sm: "block" },
+    "& .MuiDrawer-paper": {
+      width: isCollapsed ? collapsedWidth : drawerWidth,
+      bgcolor: "background.paper",
+      borderRight: "1px solid",
+      borderColor: "divider",
+      transition: "width 0.3s ease",
+      overflowX: 'hidden',
+    }
+  };
+  const drowerMobSx = {
+    display: { xs: "block", sm: "none" },
+    "& .MuiDrawer-paper": {
+      width: drawerWidth,
+      borderRight: "none",
+      bgcolor: "background.paper",
+      backgroundImage: "none",
+    },
+  }
   return (
     <Box component="nav" sx={{ width: { sm: isCollapsed ? collapsedWidth : drawerWidth }, flexShrink: { sm: 0 }, transition: 'width 0.3s ease' }}>
       {/* ===== Mobile Drawer ===== */}
@@ -251,13 +294,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         onClose={onDrawerToggle}
         ModalProps={{ keepMounted: true }}
         sx={{
-          display: { xs: "block", sm: "none" },
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            borderRight: "none",
-            bgcolor: "background.paper",
-            backgroundImage: "none",
-          },
+         ...drowerMobSx,
         }}
       >
         {drawerContent}
@@ -268,15 +305,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         variant="permanent"
         open
         sx={{
-          display: { xs: "none", sm: "block" },
-          "& .MuiDrawer-paper": {
-            width: isCollapsed ? collapsedWidth : drawerWidth,
-            bgcolor: "background.paper",
-            borderRight: "1px solid",
-            borderColor: "divider",
-            transition: "width 0.3s ease",
-            overflowX: 'hidden',
-          },
+         ...drawerDeskSx,
         }}
       >
         {drawerContent}
